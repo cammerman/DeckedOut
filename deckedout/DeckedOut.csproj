@@ -84,7 +84,9 @@
     </Compile>
     <Compile Include="Modules\Home.cs" />
     <Compile Include="Modules\Deck.cs" />
+    <Compile Include="Modules\Slide.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\Slide.cs" />
     <Compile Include="ViewModels\Deck.cs" />
     <Compile Include="ViewModels\DeckList.cs" />
   </ItemGroup>
@@ -95,6 +97,7 @@
     <Content Include="Views\NewDeck.cshtml" />
     <None Include="Views\Home.cshtml" />
     <Content Include="Views\Deck.cshtml" />
+    <Content Include="Views\Slide\Show.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

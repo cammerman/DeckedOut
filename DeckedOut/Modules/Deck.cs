@@ -21,6 +21,7 @@ namespace DeckedOut.Modules
                             new ViewModels.Deck { Id = 2, Name = "Unit Testing Patterns and Practices" }
                             }
                         }));
+
             Get("/Deck/New", p => View("NewDeck"));
         }
     }

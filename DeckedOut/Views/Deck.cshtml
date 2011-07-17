@@ -12,7 +12,7 @@
             <ul>
                 @foreach (var deck in @Model.Decks)
                 { 
-                    <li><a href="Deck/Show/@deck.Id">@deck.Name</a><a href="Deck/Edit/@deck.Id">Edit</a></li>
+                    <li><a href="Deck/@deck.Id/Slide/1">@deck.Name</a> <a href="Deck/Edit/@deck.Id">Edit</a></li>
                 }
             </ul>
         </div>
