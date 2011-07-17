@@ -99,6 +99,7 @@
     <Compile Include="ViewModels\Slide.cs" />
     <Compile Include="ViewModels\Deck.cs" />
     <Compile Include="ViewModels\DeckList.cs" />
+    <Compile Include="ViewModels\SlideForm.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

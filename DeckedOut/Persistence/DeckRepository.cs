@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using DeckedOut.Domain;
 using System.Xml.Serialization;
+using System.IO;
 
 namespace DeckedOut.Persistence
 {
@@ -29,23 +30,87 @@ namespace DeckedOut.Persistence
 
         protected virtual DeckDatabase LoadDb()
         {
-            var deserialize = new XmlSerializer(typeof(DeckDatabase));
-            return null;
+            var deserializer = new XmlSerializer(typeof(DeckDatabase));
+
+            try
+            {
+                using (var fs = new FileStream("db.xml", FileMode.Open, FileAccess.Read, FileShare.Read))
+                {
+                    return deserializer.Deserialize(fs) as DeckDatabase;
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                return new DeckDatabase { Decks = new List<Deck>() };
+            }
         }
 
-        public Deck Get(int id)
+        public virtual Deck Get(int id)
         {
-            throw new NotImplementedException();
+            return Db.Decks.FirstOrDefault(deck => deck.Id == id);
         }
 
-        public void Add(Deck newDeck)
+        public virtual void Add(Deck newDeck)
         {
-            throw new NotImplementedException();
+            if (newDeck.Id != 0)
+                throw new ArgumentException("Cannot add a deck with an ID already specified");
+
+            newDeck.Id =
+                1 +
+                Db.Decks
+                    .Select(deck => deck.Id)
+                    .DefaultIfEmpty(0)
+                    .Max();
+
+            Db.Decks.Add(newDeck);
         }
 
-        public void Dispose()
+        public virtual void Remove(int id)
         {
-            throw new NotImplementedException();
+            var deck = Get(id);
+
+            if (deck != null)
+                Db.Decks.Remove(deck);
+        }
+
+        protected virtual void Rollback()
+        {
+            _db = null;
+        }
+
+        protected virtual void Commit()
+        {
+            if (_db != null)
+            {
+                var serializer = new XmlSerializer(typeof(DeckDatabase));
+
+                using (var fs = new FileStream("db.xml", FileMode.Create, FileAccess.Write, FileShare.Read))
+                {
+                    serializer.Serialize(fs, _db);
+                }
+            }
+        }
+
+        public virtual void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // Clean up managed resources
+                Commit();
+            }   
+
+            // Clean up unmanaged resources
+        }
+
+        ~DeckRepository()
+        {
+            Dispose(false);
         }
     }
 }

@@ -23,11 +23,11 @@ namespace DeckedOut.Modules
                 "Deck/:deckId/Slide/:slideNumber/Edit",
                 p => View(
                     "Slide/Edit",
-                    new ViewModels.Slide()
+                    new ViewModels.SlideForm()
                     {
                         DeckName = "Pechakucha",
-                        Number = Convert.ToInt32(p.slideNumber),
-                        Text = String.Format("Slide {0}", p.slideNumber)
+                        SlideNumber = Convert.ToInt32(p.slideNumber),
+                        Content = String.Format("Slide {0}", p.slideNumber)
                     }));
         }
     }
