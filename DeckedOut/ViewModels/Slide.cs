@@ -8,7 +8,7 @@ namespace DeckedOut.ViewModels
     public class Slide
     {
         public virtual string DeckName { get; set; }
-        public virtual int Number { get; set; }
-        public virtual string Text { get; set; }
+        public virtual int SlideNumber { get; set; }
+        public virtual string Content { get; set; }
     }
 }

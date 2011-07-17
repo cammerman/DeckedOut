@@ -7,6 +7,7 @@ namespace DeckedOut.Domain
 {
     public interface IDeckRepository : IDisposable
     {
+        IEnumerable<Deck> GetAll();
         Deck Get(int id);
         void Add(Deck newDeck);
     }

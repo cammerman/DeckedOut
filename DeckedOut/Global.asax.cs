@@ -6,6 +6,7 @@ using System.Web.Security;
 using System.Web.SessionState;
 using Jessica;
 using Jessica.ViewEngine.Razor;
+using DeckedOut.Infrastructure;
 
 namespace DeckedOut
 {
@@ -13,8 +14,9 @@ namespace DeckedOut
     {
         protected void Application_Start(object sender, EventArgs e)
         {
-            Jess.Initialise();
             Jess.ViewEngines.Add(new RazorViewEngine());
+            Jess.Factory = new AutofacJessicaFactory(AutofacConfig.Configure());
+            Jess.Initialise();
         }
     }
 }

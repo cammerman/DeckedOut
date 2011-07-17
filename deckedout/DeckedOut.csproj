@@ -70,6 +70,7 @@
     <Content Include="Scripts\jquery-1.6.2-vsdoc.js" />
     <Content Include="Scripts\jquery-1.6.2.js" />
     <Content Include="Scripts\jquery-1.6.2.min.js" />
+    <Content Include="Scripts\jquery.watermark.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -88,6 +89,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\AutofacConfig.cs" />
+    <Compile Include="Infrastructure\AutofacJessicaFactory.cs" />
     <Compile Include="Modules\Home.cs" />
     <Compile Include="Modules\Deck.cs" />
     <Compile Include="Modules\Slide.cs" />

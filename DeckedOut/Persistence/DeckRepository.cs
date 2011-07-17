@@ -45,6 +45,11 @@ namespace DeckedOut.Persistence
             }
         }
 
+        public virtual IEnumerable<Deck> GetAll()
+        {
+            return Db.Decks;
+        }
+
         public virtual Deck Get(int id)
         {
             return Db.Decks.FirstOrDefault(deck => deck.Id == id);

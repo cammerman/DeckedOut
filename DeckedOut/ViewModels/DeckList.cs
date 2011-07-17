@@ -12,6 +12,8 @@ namespace DeckedOut.ViewModels
             Decks = new List<Deck>();
         }
 
-        public virtual IEnumerable<Deck> Decks { get; set; }
+        public virtual List<Deck> Decks { get; set; }
+
+        public virtual bool AnyDecksExist { get { return Decks.Any(); } }
     }
 }

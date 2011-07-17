@@ -1,20 +1,56 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <title>Manage Decks</title>
         <link rel="stylesheet" type="text/css" href="styles/main.css" />
+        <script src="jquery-1.6.2.js" type="text/javascript"></script>
+        <script src="jquery.watermarkinput.js" type="text/javascript"></script>
     </head>
     <body>
         <div id="content">
-            <a href="Deck/New">Start a new Deck</a>
-            
+            <span>Start a new Deck:</span><input id="NewDeckName" type="text" /><a id="CreateDeck" href="#">Create!</a>
+
             <h1>Decks:</h1>
-            <ul>
-                @foreach (var deck in @Model.Decks)
-                { 
-                    <li><a href="Deck/@deck.Id/Slide/1">@deck.Name</a> <a href="Deck/@deck.Id/Slide/1/Edit">Edit</a></li>
-                }
-            </ul>
+
+            @if (@Model.AnyDecksExist)
+            { 
+                <ul>
+                    @foreach (var deck in @Model.Decks)
+                    { 
+                        <li><a href="Deck/@deck.Id/Slide/1">@deck.Name</a> <a href="Deck/@deck.Id/Slide/1/Edit">Edit</a></li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <div>No decks have been created yet.</div>
+            }
         </div>
     </body>
+    <script>
+        $.ajaxSetup({ cache: false });
+        $(document).ready(function () {
+            $("#NewDeckName").watermark("New Deck Title");
+
+            $("#CreateDeck").click(function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: "Deck/New/",
+                    data: {
+                        Name: $("#NewDeckName")
+                    },
+                    dataType: "json",
+                    context: document.body,
+                    type: "POST",
+                    async: false,
+                    success: function (data) {
+                        if (data.success) {
+                            window.location = "Deck/" + data.Id + "Slide/1/Edit";
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 </html>
