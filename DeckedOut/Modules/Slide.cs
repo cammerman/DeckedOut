@@ -18,6 +18,17 @@ namespace DeckedOut.Modules
                         DeckName = "Pechakucha",
                         Number = Convert.ToInt32(p.slideNumber),
                         Text = String.Format("Slide {0}", p.slideNumber) }));
+
+            Get(
+                "Deck/:deckId/Slide/:slideNumber/Edit",
+                p => View(
+                    "Slide/Edit",
+                    new ViewModels.Slide()
+                    {
+                        DeckName = "Pechakucha",
+                        Number = Convert.ToInt32(p.slideNumber),
+                        Text = String.Format("Slide {0}", p.slideNumber)
+                    }));
         }
     }
 }

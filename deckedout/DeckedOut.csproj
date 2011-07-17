@@ -94,10 +94,11 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\NewDeck.cshtml" />
+    <Content Include="Views\Deck\Edit.cshtml" />
     <None Include="Views\Home.cshtml" />
-    <Content Include="Views\Deck.cshtml" />
+    <Content Include="Views\Deck\Index.cshtml" />
     <Content Include="Views\Slide\Show.cshtml" />
+    <Content Include="Views\Slide\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

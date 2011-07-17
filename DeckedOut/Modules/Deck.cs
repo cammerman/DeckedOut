@@ -14,7 +14,7 @@ namespace DeckedOut.Modules
             Get(
                 "/Deck",
                 p => View(
-                    "Deck",
+                    "Deck/Index",
                     new DeckList() {
                         Decks = new[] {
                             new ViewModels.Deck { Id = 1, Name = "Intro to .NET Micro Web Frameworks, via JessicaFx" },
@@ -22,7 +22,7 @@ namespace DeckedOut.Modules
                             }
                         }));
 
-            Get("/Deck/New", p => View("NewDeck"));
+            Get("/Deck/New", p => null);
         }
     }
 }
