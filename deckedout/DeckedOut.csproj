@@ -79,13 +79,23 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain\Deck.cs" />
+    <Compile Include="Domain\IDeckRepository.cs" />
+    <Compile Include="Domain\Line.cs" />
+    <Compile Include="Domain\ListMembership.cs" />
+    <Compile Include="Domain\EListType.cs" />
+    <Compile Include="Domain\Slide.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Modules\Home.cs" />
     <Compile Include="Modules\Deck.cs" />
     <Compile Include="Modules\Slide.cs" />
+    <Compile Include="Persistence\DeckDatabase.cs" />
+    <Compile Include="Persistence\DeckRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IMarkdown.cs" />
+    <Compile Include="Services\IRenderHtml.cs" />
     <Compile Include="ViewModels\Slide.cs" />
     <Compile Include="ViewModels\Deck.cs" />
     <Compile Include="ViewModels\DeckList.cs" />
