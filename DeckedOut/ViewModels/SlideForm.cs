@@ -15,5 +15,6 @@ namespace DeckedOut.ViewModels
 
         public virtual int? PreviousSlideNumber { get; set; }
         public virtual int? NextSlideNumber { get; set; }
+        public virtual int? LastSlideNumber { get; set; }
     }
 }

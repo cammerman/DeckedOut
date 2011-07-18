@@ -9,22 +9,23 @@
     <body>
         <div id="content">
             <textarea Id="SlideContent" cols="80" rows="30" wrap="soft" name="SlideText">@Model.Content</textarea>
-            <div>
-                <a id="SaveChanges" href="#">Save</a>
-            </div>
+            <ul>
+                <li><a id="AddSlideBefore" href="#">Add Slide Before</a></li>
+                <li><a id="AddSlideAfter" href="#">Add Slide After</a></li>
+                <li><a id="SaveChanges" href="#">Save</a></li>
+            </ul>
 
             <ul>
                 @if (Model.PreviousSlideNumber != null)
                 { 
-                    <li><a id="PreviousSlide" href="Deck/@Model.DeckId/Slide/@Model.SlideNumber - 1/Edit">Previous</a></li>
+                    <li><a id="FirstSlide" href="/Deck/@Model.DeckId/Slide/1/Edit">First</a></li>
+                    <li><a id="PreviousSlide" href="/Deck/@Model.DeckId/Slide/@Model.PreviousSlideNumber/Edit">Previous</a></li>
                 }
-                
-                <li><a id="AddSlideBefore" href="#">Add Slide Before</a></li>
-                <li><a id="AddSlideAfter" href="#">Add Slide After</a></li>
                 
                 @if (Model.NextSlideNumber != null)
                 { 
-                    <li><a id="NextSlide" href="Deck/@Model.DeckId/Slide/@Model.SlideNumber/Edit">Next</a></li>
+                    <li><a id="NextSlide" href="/Deck/@Model.DeckId/Slide/@Model.NextSlideNumber/Edit">Next</a></li>
+                    <li><a id="LastSlide" href="/Deck/@Model.DeckId/Slide/@(Model.LastSlideNumber)/Edit">Last</a></li>
                 }
             </ul>
         </div>
@@ -91,7 +92,7 @@
                     async: false,
                     success: function (data) {
                         if (data.success) {
-                            window.location = "/Deck/@Model.DeckId/Slide/@(Model.SlideNumber + 1)/Add/";
+                            window.location = "/Deck/@Model.DeckId/Slide/@(Model.SlideNumber + 1)/Edit/";
                         } else if (data.success === false) {
                             alert(data.message);
                         }

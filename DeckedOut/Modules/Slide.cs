@@ -26,11 +26,6 @@ namespace DeckedOut.Modules
                         Convert.ToInt32((string)p.slideNumber))
                     )
                 );
-                    
-                    //new ViewModels.Slide() {
-                    //    DeckName = "Pechakucha",
-                    //    SlideNumber = Convert.ToInt32(p.slideNumber),
-                    //    Content = String.Format("Slide {0}", p.slideNumber) }));
 
             Get(
                 "Deck/:deckId/Slide/:slideNumber/Edit",
@@ -45,21 +40,44 @@ namespace DeckedOut.Modules
             Post(
                 "Deck/:deckId/Slide/:slideNumber/Edit",
                 p => SaveContent(p));
-                    
-                    //new ViewModels.SlideForm()
-                    //{
-                    //    DeckName = "Pechakucha",
-                    //    SlideNumber = Convert.ToInt32(p.slideNumber),
-                    //    Content = String.Format("Slide {0}", p.slideNumber)
-                    //}));
 
+            Post(
+                "Deck/:deckId/Slide/:slideNumber/Add",
+                p => AddSlide(p));
         }
 
+        protected virtual Domain.Deck GetDeck(string deckId)
+        {
+            return Repository.Get(Convert.ToInt32(deckId));
+        }
+
+        protected virtual Domain.Slide GetDeckSlide(Domain.Deck deck, string slideNumber)
+        {
+            return deck.Slide(Convert.ToInt32(slideNumber));
+        }
+
+        protected virtual string AddSlide(dynamic p)
+        {
+            Domain.Deck deck = GetDeck(p.deckId);
+            var slideNumber = Convert.ToInt32((string)p.slideNumber);
+
+            if (slideNumber < 0)
+                slideNumber = 0;
+            else if (slideNumber > deck.Slides.Count + 1)
+                slideNumber = deck.Slides.Count + 1;
+
+            deck.AddSlide(slideNumber);
+
+            var serializer = new JavaScriptSerializer();
+
+            return serializer.Serialize(new { success = true });
+        }
+        
         protected virtual string SaveContent(dynamic p)
         {
-            var deck = Repository.Get(Convert.ToInt32((string)p.deckId));
+            var deck = GetDeck(p.deckId);
 
-            var slide = deck.Slide(Convert.ToInt32((string)p.slideNumber));
+            var slide = GetDeckSlide(deck, p.slideNumber);
 
             slide.Lines =
                 ((string)p.content)
@@ -87,7 +105,10 @@ namespace DeckedOut.Modules
                 model.PreviousSlideNumber = slideNumber - 1;
 
             if (slideNumber < deck.Slides.Count)
+            {
                 model.NextSlideNumber = slideNumber + 1;
+                model.LastSlideNumber = deck.Slides.Count;
+            }
 
             return model;
         }

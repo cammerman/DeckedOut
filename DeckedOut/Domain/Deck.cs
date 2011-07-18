@@ -36,5 +36,10 @@ namespace DeckedOut.Domain
 
             return Slides[number - 1];
         }
+
+        public virtual void AddSlide(int slideNumber)
+        {
+            Slides.Insert(slideNumber - 1, new Slide());
+        }
     }
 }
