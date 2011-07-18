@@ -3,8 +3,8 @@
     <head>
         <title>Manage Decks</title>
         <link rel="stylesheet" type="text/css" href="styles/main.css" />
-        <script src="jquery-1.6.2.js" type="text/javascript"></script>
-        <script src="jquery.watermarkinput.js" type="text/javascript"></script>
+        <script src="Scripts/jquery-1.6.2.js" type="text/javascript"></script>
+        <script src="Scripts/jquery.watermark.min.js" type="text/javascript"></script>
     </head>
     <body>
         <div id="content">
@@ -36,9 +36,9 @@
                 e.preventDefault();
 
                 $.ajax({
-                    url: "Deck/New/",
+                    url: "/Deck/New/",
                     data: {
-                        Name: $("#NewDeckName")
+                        name: $("#NewDeckName").val()
                     },
                     dataType: "json",
                     context: document.body,
@@ -46,7 +46,9 @@
                     async: false,
                     success: function (data) {
                         if (data.success) {
-                            window.location = "Deck/" + data.Id + "Slide/1/Edit";
+                            window.location = "Deck/" + data.id + "/Slide/1/Edit";
+                        } else if (data.success === false) {
+                            alert(data.message);
                         }
                     }
                 });

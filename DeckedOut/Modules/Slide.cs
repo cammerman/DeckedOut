@@ -30,7 +30,11 @@ namespace DeckedOut.Modules
                 "Deck/:deckId/Slide/:slideNumber/Edit",
                 p => View(
                     "Slide/Edit",
-                    MapToModel(p.deckId, p.slideNumber)));
+                    MapToModel(
+                        Convert.ToInt32((string)p.deckId),
+                        Convert.ToInt32((string)p.slideNumber))
+                    )
+                );
                     
                     //new ViewModels.SlideForm()
                     //{

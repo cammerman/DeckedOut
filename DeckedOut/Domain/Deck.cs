@@ -8,6 +8,11 @@ namespace DeckedOut.Domain
     [Serializable]
     public class Deck
     {
+        public Deck()
+        {
+            Slides = new List<Slide>();
+        }
+
         public virtual int Id { get; set; }
 
         public virtual string Name { get; set; }

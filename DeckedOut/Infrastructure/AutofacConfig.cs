@@ -7,6 +7,8 @@ using System.Reflection;
 using Jessica;
 using Jessica.ViewEngine.Razor;
 using Jessica.ViewEngine;
+using DeckedOut.Persistence;
+using DeckedOut.Domain;
 
 namespace DeckedOut.Infrastructure
 {
@@ -25,6 +27,10 @@ namespace DeckedOut.Infrastructure
             builder.RegisterAssemblyTypes(assembly)
                 .Where(t => t.GetInterfaces().Any())
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<DeckRepository>()
+                .As<IDeckRepository>()
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<RazorViewEngine>().AsSelf();
 
