@@ -3,10 +3,101 @@
     <head>
         <title>@Model.DeckName - Slide @Model.SlideNumber</title>
         <link rel="stylesheet" type="text/css" href="styles/main.css" />
+        <script src="/Scripts/jquery-1.6.2.js" type="text/javascript"></script>
+        <script src="/Scripts/jquery.watermark.min.js" type="text/javascript"></script>
     </head>
     <body>
         <div id="content">
-            <textarea cols="80" rows="30" wrap="soft" name="SlideText">@Model.Content</textarea>
+            <textarea Id="SlideContent" cols="80" rows="30" wrap="soft" name="SlideText">@Model.Content</textarea>
+            <div>
+                <a id="SaveChanges" href="#">Save</a>
+            </div>
+
+            <ul>
+                @if (Model.PreviousSlideNumber != null)
+                { 
+                    <li><a id="PreviousSlide" href="Deck/@Model.DeckId/Slide/@Model.SlideNumber - 1/Edit">Previous</a></li>
+                }
+                
+                <li><a id="AddSlideBefore" href="#">Add Slide Before</a></li>
+                <li><a id="AddSlideAfter" href="#">Add Slide After</a></li>
+                
+                @if (Model.NextSlideNumber != null)
+                { 
+                    <li><a id="NextSlide" href="Deck/@Model.DeckId/Slide/@Model.SlideNumber/Edit">Next</a></li>
+                }
+            </ul>
         </div>
     </body>
+
+    <script>
+        $.ajaxSetup({ cache: false });
+        $(document).ready(function () {
+            $("#SlideContent").watermark("Create your slide");
+
+            $("#SaveChanges").click(function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: "/Deck/@Model.DeckId/Slide/@Model.SlideNumber/Edit/",
+                    data: {
+                        content: $("#SlideContent").val()
+                    },
+                    dataType: "json",
+                    context: document.body,
+                    type: "POST",
+                    async: false,
+                    success: function (data) {
+                        if (data.success === false) {
+                            alert(data.message);
+                        }
+                    }
+                });
+            });
+
+            $("#AddSlideBefore").click(function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: "/Deck/@Model.DeckId/Slide/@Model.SlideNumber/Add/",
+                    data: {
+                        content: $("#SlideContent").val()
+                    },
+                    dataType: "json",
+                    context: document.body,
+                    type: "POST",
+                    async: false,
+                    success: function (data) {
+                        if (data.success) {
+                            window.location.reload(true);
+                        } else if (data.success === false) {
+                            alert(data.message);
+                        }
+                    }
+                });
+            });
+
+            $("#AddSlideAfter").click(function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: "/Deck/@Model.DeckId/Slide/@(Model.SlideNumber + 1)/Add/",
+                    data: {
+                        content: $("#SlideContent").val()
+                    },
+                    dataType: "json",
+                    context: document.body,
+                    type: "POST",
+                    async: false,
+                    success: function (data) {
+                        if (data.success) {
+                            window.location = "/Deck/@Model.DeckId/Slide/@(Model.SlideNumber + 1)/Add/";
+                        } else if (data.success === false) {
+                            alert(data.message);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 </html>

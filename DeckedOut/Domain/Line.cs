@@ -9,6 +9,8 @@ namespace DeckedOut.Domain
     [Serializable]
     public class Line
     {
+        public virtual string Content { get; set; }
+
         public virtual Color TextColor { get; set; }
         public virtual int Size { get; set; }
         public virtual int IndentDepth { get; set; }
