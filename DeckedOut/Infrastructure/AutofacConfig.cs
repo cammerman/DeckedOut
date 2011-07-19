@@ -9,6 +9,7 @@ using Jessica.ViewEngine.Razor;
 using Jessica.ViewEngine;
 using DeckedOut.Persistence;
 using DeckedOut.Domain;
+using MarkdownSharp;
 
 namespace DeckedOut.Infrastructure
 {
@@ -33,6 +34,8 @@ namespace DeckedOut.Infrastructure
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<RazorViewEngine>().AsSelf();
+
+            builder.RegisterType<Markdown>().AsSelf();
 
             return builder.Build();
         }

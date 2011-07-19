@@ -44,6 +44,9 @@
     <Reference Include="Jessica.ViewEngine.Razor">
       <HintPath>..\packages\Jessica-ViewEngine-Razor.0.9.0\lib\Jessica.ViewEngine.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="MarkdownSharp">
+      <HintPath>..\packages\MarkdownSharp.1.13.0.0\lib\35\MarkdownSharp.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -97,8 +100,6 @@
     <Compile Include="Persistence\DeckDatabase.cs" />
     <Compile Include="Persistence\DeckRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\IMarkdown.cs" />
-    <Compile Include="Services\IRenderHtml.cs" />
     <Compile Include="ViewModels\Slide.cs" />
     <Compile Include="ViewModels\Deck.cs" />
     <Compile Include="ViewModels\DeckList.cs" />

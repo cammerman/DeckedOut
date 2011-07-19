@@ -6,17 +6,20 @@ using Jessica;
 using DeckedOut.Domain;
 using System.Web.Script.Serialization;
 using System.Text;
+using MarkdownSharp;
 
 namespace DeckedOut.Modules
 {
     public class Slide : JessModule
     {
         protected virtual IDeckRepository Repository { get; private set; }
+        protected virtual Markdown Markdown { get; private set; }
 
-        public Slide(IDeckRepository repository)
+        public Slide(IDeckRepository repository, Markdown markdown)
         {
             Repository = repository;
-        
+            Markdown = markdown;
+
             Get(
                 "Deck/:deckId/Slide/:slideNumber",
                 p => View(
@@ -76,14 +79,9 @@ namespace DeckedOut.Modules
         protected virtual string SaveContent(dynamic p)
         {
             var deck = GetDeck(p.deckId);
-
             var slide = GetDeckSlide(deck, p.slideNumber);
 
-            slide.Lines =
-                ((string)p.content)
-                    .Split('\n')
-                    .Select(MapToLine)
-                    .ToList();
+            slide.Content = (string)p.content;
 
             var serializer = new JavaScriptSerializer();
 
@@ -113,22 +111,13 @@ namespace DeckedOut.Modules
             return model;
         }
 
-        protected virtual string RenderLines(Domain.Slide slide)
-        {
-            return
-                slide.Lines.Aggregate(
-                    new StringBuilder(),
-                    (builder, next) => builder.AppendLine(next.Content),
-                    builder => builder.ToString());
-        }
-
         protected virtual ViewModels.SlideForm MapToFormModel(Domain.Deck deck, Domain.Slide slide)
         {
             return new ViewModels.SlideForm
             {
                 DeckName = deck.Name,
                 SlideNumber = deck.NumberOf(slide),
-                Content = RenderLines(slide),
+                Content = slide.Content,
                 DeckId = deck.Id
             };
         }
@@ -145,7 +134,8 @@ namespace DeckedOut.Modules
             return new ViewModels.Slide {
                 DeckName = deck.Name,
                 SlideNumber = deck.NumberOf(slide),
-                Content = RenderLines(slide) };
+                Content = new HtmlString(Markdown.Transform(slide.Content))
+            };
         }
     }
 }

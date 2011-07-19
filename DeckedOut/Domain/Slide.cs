@@ -10,15 +10,9 @@ namespace DeckedOut.Domain
     {
         public Slide()
         {
-            _lines = new List<Line>();
+            Content = "";
         }
 
-        private List<Line> _lines;
-
-        public virtual List<Line> Lines
-        {
-            get { return _lines; }
-            set { _lines = value ?? new List<Line>(); }
-        }
+        public virtual string Content { get; set; }
     }
 }
