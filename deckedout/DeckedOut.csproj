@@ -70,10 +70,36 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
-    <Content Include="Scripts\jquery-1.6.2-vsdoc.js" />
-    <Content Include="Scripts\jquery-1.6.2.js" />
-    <Content Include="Scripts\jquery-1.6.2.min.js" />
-    <Content Include="Scripts\jquery.watermark.min.js" />
+    <Content Include="Scripts\jquery\jquery-1.6.2-vsdoc.js" />
+    <Content Include="Scripts\jquery\jquery-1.6.2.js" />
+    <Content Include="Scripts\jquery\jquery-1.6.2.min.js" />
+    <Content Include="Scripts\jquery\jquery.watermark.min.js" />
+    <Content Include="Scripts\resolution-independence\res-ind.js" />
+    <Content Include="Scripts\SyntaxHighlighter\shAutoloader.js" />
+    <Content Include="Scripts\SyntaxHighlighter\shBrushCpp.js" />
+    <Content Include="Scripts\SyntaxHighlighter\shBrushCSharp.js" />
+    <Content Include="Scripts\SyntaxHighlighter\shBrushCss.js" />
+    <Content Include="Scripts\SyntaxHighlighter\shBrushJScript.js" />
+    <Content Include="Scripts\SyntaxHighlighter\shBrushPowerShell.js" />
+    <Content Include="Scripts\SyntaxHighlighter\shBrushPython.js" />
+    <Content Include="Scripts\SyntaxHighlighter\shBrushRuby.js" />
+    <Content Include="Scripts\SyntaxHighlighter\shBrushSql.js" />
+    <Content Include="Scripts\SyntaxHighlighter\shBrushVb.js" />
+    <Content Include="Scripts\SyntaxHighlighter\shBrushXml.js" />
+    <Content Include="Scripts\SyntaxHighlighter\shCore.js" />
+    <Content Include="Scripts\SyntaxHighlighter\shLegacy.js" />
+    <Content Include="Scripts\SyntaxHighlighter\xregexp\xregexp-min.js" />
+    <Content Include="Styles\SyntaxHighlighter\shCore.css" />
+    <Content Include="Styles\show.css" />
+    <Content Include="Styles\resolution-independence\res-ind.css" />
+    <Content Include="Styles\SyntaxHighlighter\shThemeDefault.css" />
+    <Content Include="Styles\SyntaxHighlighter\shThemeDjango.css" />
+    <Content Include="Styles\SyntaxHighlighter\shThemeEclipse.css" />
+    <Content Include="Styles\SyntaxHighlighter\shThemeEmacs.css" />
+    <Content Include="Styles\SyntaxHighlighter\shThemeFadeToGrey.css" />
+    <Content Include="Styles\SyntaxHighlighter\shThemeMDUltra.css" />
+    <Content Include="Styles\SyntaxHighlighter\shThemeMidnight.css" />
+    <Content Include="Styles\SyntaxHighlighter\shThemeRDark.css" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

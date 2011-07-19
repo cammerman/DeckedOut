@@ -41,6 +41,10 @@ namespace DeckedOut.Modules
                 );
 
             Post(
+                "Deck/:deckId/Slide/:slideNumber/Remove",
+                p => RemoveSlide(p));
+
+            Post(
                 "Deck/:deckId/Slide/:slideNumber/Edit",
                 p => SaveContent(p));
 
@@ -75,7 +79,19 @@ namespace DeckedOut.Modules
 
             return serializer.Serialize(new { success = true });
         }
-        
+
+        protected virtual string RemoveSlide(dynamic p)
+        {
+            Domain.Deck deck = GetDeck(p.deckId);
+            var slideNumber = Convert.ToInt32((string)p.slideNumber);
+
+            deck.RemoveSlide(slideNumber);
+
+            var serializer = new JavaScriptSerializer();
+
+            return serializer.Serialize(new { success = true });
+        }
+
         protected virtual string SaveContent(dynamic p)
         {
             var deck = GetDeck(p.deckId);
@@ -126,7 +142,17 @@ namespace DeckedOut.Modules
         {
             var deck = Repository.Get(deckId);
 
-            return MapToModel(deck, deck.Slide(slideNumber));
+            var model = MapToModel(deck, deck.Slide(slideNumber));
+
+            if (slideNumber > 1)
+                model.PreviousSlideNumber = slideNumber - 1;
+
+            if (slideNumber < deck.Slides.Count)
+            {
+                model.NextSlideNumber = slideNumber + 1;
+            }
+
+            return model;
         }
 
         protected virtual ViewModels.Slide MapToModel(Domain.Deck deck, Domain.Slide slide)
@@ -134,7 +160,8 @@ namespace DeckedOut.Modules
             return new ViewModels.Slide {
                 DeckName = deck.Name,
                 SlideNumber = deck.NumberOf(slide),
-                Content = new HtmlString(Markdown.Transform(slide.Content))
+                Content = new HtmlString(Markdown.Transform(slide.Content)),
+                DeckId = deck.Id
             };
         }
     }

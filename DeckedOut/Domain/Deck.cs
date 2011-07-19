@@ -41,5 +41,13 @@ namespace DeckedOut.Domain
         {
             Slides.Insert(slideNumber - 1, new Slide());
         }
+
+        public virtual void RemoveSlide(int slideNumber)
+        {
+            var index = slideNumber - 1;
+
+            if (index >= 0 || index < Slides.Count)
+                Slides.RemoveAt(index);
+        }
     }
 }

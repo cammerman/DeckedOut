@@ -1,0 +1,55 @@
+﻿body 
+{
+    background-color: #000;
+    color: #FFFFFF
+}
+
+#slide ul
+{
+    padding-left: 2em;    
+}
+
+#slide li
+{
+    padding-left: 0.5em;
+}
+
+.syntaxhighlighter
+{
+    font-size: .8em !important;
+}
+
+#slide h1, #slide h2
+{
+    text-align: center;
+}
+
+#slide h3, #slide h4, #slide h5, #slide h6
+{
+    text-align: left;
+}
+
+#slide ul, #slide ol
+{
+    text-align: left;
+}
+
+#slide .centered
+{
+    text-align: center;
+}
+
+#slide .leftJustified
+{
+    text-align: left;
+}
+
+#slide .rightJustified
+{
+    text-align: right;
+}
+
+pre
+{
+    margin-left: 2em;
+}

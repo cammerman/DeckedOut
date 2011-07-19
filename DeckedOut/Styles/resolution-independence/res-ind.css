@@ -1,0 +1,38 @@
+﻿/* Copyright (C)2007 Windy Road
+  This work is licensed under a Creative Commons Attribution 2.5 License.  See http://creativecommons.org/licenses/by/2.5/au/
+  */
+@import 'undo.css';
+
+body {
+	text-align: center;
+	font-family: "verdana", sans-serif;
+	margin: 0;
+	padding: 0;
+	background: white;
+}
+
+#page-width {
+	height: 0;
+}
+
+#content {
+	margin: auto;
+	overflow: visible;
+	min-width: 30.0em; 
+	max-width: 30.0em; 
+	padding: 0em 2em;
+	line-height: 2.5ex;
+}
+
+#main-wrapper {
+	padding: 1em;
+}
+
+#debug {
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: white;
+	display: none;/**/
+}
+
