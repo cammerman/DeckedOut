@@ -23,6 +23,14 @@ namespace DeckedOut.Modules
             Markdown = markdown;
 
             Get(
+                "Deck/:deckId/Slide",
+                p => DynamicViewModel(p.deckId));
+
+            Get(
+                "Deck/:deckId/Slide/:slideNumber/Content",
+                p => GetContent(p.deckId, p.slideNumber));
+
+            Get(
                 "Deck/:deckId/Slide/:slideNumber",
                 p => View(
                     "Slide/Show",
@@ -63,6 +71,34 @@ namespace DeckedOut.Modules
         protected virtual Domain.Slide GetDeckSlide(Domain.Deck deck, string slideNumber)
         {
             return deck.Slide(Convert.ToInt32(slideNumber));
+        }
+
+        protected virtual Response DynamicViewModel(string deckId)
+        {
+            var repo = CreateRepository();
+
+            Domain.Deck deck = GetDeck(repo, deckId);
+
+            return View("Slide/ShowDynamic", new ViewModels.DynamicSlide { DeckId = deck.Id, DeckName = deck.Name });
+        }
+
+        protected virtual Response GetContent(string deckId, string slideNumber)
+        {
+            var repo = CreateRepository();
+
+            var actualDeckId = Convert.ToInt32(deckId);
+            var deck = repo.Get(actualDeckId);
+            
+            var actualSlideNumber = Convert.ToInt32(slideNumber);
+            if (actualSlideNumber < 1)
+                return Response.AsJson(new { actualSlideNumber = 1 });
+            else if (actualSlideNumber > deck.Slides.Count)
+                return Response.AsJson(new { actualSlideNumber = deck.Slides.Count });
+
+            return
+                View(
+                    "Slide/ShowContent",
+                    MapToModel(actualDeckId, actualSlideNumber));
         }
 
         protected virtual Response AddSlide(dynamic p)

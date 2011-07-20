@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>@Model.DeckName</title>
+        <link rel="stylesheet" type="text/css" href="/styles/resolution-independence/res-ind.css" />
+        <link rel="stylesheet" type="text/css" href="/styles/SyntaxHighlighter/shCore.css" />
+        <link rel="stylesheet" type="text/css" href="/styles/SyntaxHighlighter/shThemeFadeToGrey.css" />
+        <link rel="stylesheet" type="text/css" href="/styles/show.css" />
+        <script src="/Scripts/jquery/jquery-1.6.2.js" type="text/javascript"></script>
+        <script src="/Scripts/jquery/ba-hashchange/jquery.ba-hashchange.js" type="text/javascript"></script>
+        <script src="/Scripts/resolution-independence/res-ind.js" type="text/javascript"></script>
+        <script src="/Scripts/SyntaxHighlighter/xregexp/xregexp-min.js" type="text/javascript" ></script>
+        <script src="/Scripts/SyntaxHighlighter/shCore.js" type="text/javascript"></script>
+        <script src="/Scripts/SyntaxHighlighter/shAutoloader.js" type="text/javascript"></script>
+        <script src="/Scripts/SyntaxHighlighter/shLegacy.js" type="text/javascript"></script>
+        <script src="/Scripts/SyntaxHighlighter/shBrushCSharp.js" type="text/javascript" ></script>
+    </head>
+    <body>
+        <div id="page-width"></div>
+        <div id="header">
+            <!--<h1 id="title">
+                <a href="http://windyroad.org/">Resolution Independent Web Design Demonstration</a>
+            </h1>-->
+        </div>
+        <p id="debug"></p>
+        <div id="content">
+            <div id="main-wrapper">
+                <div id="slide">
+                    <!-- Slide content goes here. -->
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <!--<div>
+                <a rel="license" href="http://creativecommons.org/licenses/by/2.5/au/"><img id="cc" alt="Creative Commons License" src="resources/scaleimage.php?image=cc-lic.png&amp;width=80" /></a> : 
+                <a href="http://windyroad.org">Resolution Independent Web Design Demonstration</a> 
+                by
+                <a href="http://windyroad.org"><img id="logo" src="resources/scaleimage.php?image=windyroadx4.png&amp;width=100" alt="Windy Road" /></a>
+            </div>-->
+        </div>
+    </body>
+    <script>
+        var renderSlide = function (slideNumber) {
+            $.ajax({
+                url: "/Deck/@Model.DeckId/Slide/" + slideNumber + "/Content",
+                context: document.body,
+                type: "GET",
+                async: false,
+                success: function (data) {
+                    if (!data.actualSlideNumber) {
+                        $("#slide").html(data);
+                        $("code").addClass("brush: csharp");
+                        SyntaxHighlighter.highlight();
+                    } else {
+                        window.location.hash = data.actualSlideNumber;
+                    }
+                }
+            });
+        };
+
+        $(document).ready(function () {
+            SyntaxHighlighter.defaults.toolbar = false;
+            SyntaxHighlighter.defaults.gutter = false;
+            SyntaxHighlighter.config.tagName = "code";
+
+            var changingHash = false;
+
+            $(window).hashchange(function () {
+                if (window.location.hash != "" && window.location.hash != '#' && !changingHash) {
+                    changingHash = true;
+
+                    var slideNumber = window.location.hash.replace(/^#/, '');
+
+                    if (slideNumber.length == 0) {
+                        slideNumber = "1";
+                        window.location.hash = "1";
+                    }
+
+                    renderSlide(slideNumber);
+
+                    changingHash = false;
+                }
+            });
+
+            var slideNumber = window.location.hash.replace(/^#/, '');
+            
+            if (slideNumber.length == 0) {
+                window.location.hash = "1";
+            } else {
+                renderSlide(slideNumber);
+            }
+        });
+
+        $(document).click(function (e) {
+            var slideNumber = window.location.hash.replace(/^#/, '');
+
+            if (e.button == 0) {
+                window.location.hash = +slideNumber + 1;
+            } else if (e.button == 1) {
+                window.location.hash = +slideNumber - 1;
+            }
+
+        });
+    </script>
+</html>

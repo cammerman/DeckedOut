@@ -11,7 +11,8 @@
             <div><a href="/">Home</a></div>
             <textarea Id="SlideContent" cols="80" rows="30" wrap="soft" name="SlideText">@Model.Source</textarea>
             <ul>
-                <li><a href="/Deck/@Model.DeckId/Slide/@Model.SlideNumber">View Slide</a></li>
+                <li><a href="/Deck/@Model.DeckId/Slide#@Model.SlideNumber">View Slide</a></li>
+                <li><a id="SaveAndView" href="#">Save & View Slide</a></li>
             </ul>
             <ul>
                 @if (Model.PreviousSlideNumber != null || Model.NextSlideNumber != null)
@@ -128,6 +129,33 @@
                         }
                     }
                 });
+            });
+
+            $("#SaveAndView").click(function (e) {
+                e.preventDefault();
+
+                var stop = false;
+
+                var contentDiv = $("<div></div>").text($("#SlideContent").val());
+
+                $.ajax({
+                    url: "/Deck/@Model.DeckId/Slide/@Model.SlideNumber/Edit/",
+                    data: {
+                        content: contentDiv.html()
+                    },
+                    dataType: "json",
+                    context: document.body,
+                    type: "POST",
+                    async: false,
+                    success: function (data) {
+                        if (data.success === false) {
+                            alert(data.message);
+                            stop = true;
+                        }
+                    }
+                });
+
+                window.location = "/Deck/@Model.DeckId/Slide#@Model.SlideNumber";
             });
 
             $("#SaveAddSlideAfter").click(function (e) {
