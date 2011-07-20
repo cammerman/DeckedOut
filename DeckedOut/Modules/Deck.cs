@@ -7,6 +7,7 @@ using DeckedOut.ViewModels;
 using DeckedOut.Domain;
 using System.Web.Script.Serialization;
 using Autofac.Features.OwnedInstances;
+using Jessica.Responses;
 
 namespace DeckedOut.Modules
 {
@@ -50,10 +51,10 @@ namespace DeckedOut.Modules
                 Name = domain.Name };
         }
 
-        protected virtual string CreateDeck(dynamic args)
+        protected virtual Response CreateDeck(dynamic args)
         {
-            var serializer = new JavaScriptSerializer();
-
+            //var serializer = new JavaScriptSerializer();
+            
             try
             {
                 var newDeck = new Domain.Deck() { Name = args.name };
@@ -63,12 +64,14 @@ namespace DeckedOut.Modules
                 {
                     repo.Add(newDeck);
                 }
-   
-                return serializer.Serialize(new { success = true, id = newDeck.Id });
+
+                return Response.AsJson(new { success = true, id = newDeck.Id });
+                //return serializer.Serialize(new { success = true, id = newDeck.Id });
             }
             catch (Exception ex)
             {
-                return serializer.Serialize(new { success = false, message = ex.Message });
+                return Response.AsJson(new { success = false, message = ex.Message });
+                //return serializer.Serialize(new { success = false, message = ex.Message });
             }
         }
     }

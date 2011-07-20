@@ -8,6 +8,7 @@ using System.Web.Script.Serialization;
 using System.Text;
 using MarkdownSharp;
 using Autofac.Features.OwnedInstances;
+using Jessica.Responses;
 
 namespace DeckedOut.Modules
 {
@@ -64,7 +65,7 @@ namespace DeckedOut.Modules
             return deck.Slide(Convert.ToInt32(slideNumber));
         }
 
-        protected virtual string AddSlide(dynamic p)
+        protected virtual Response AddSlide(dynamic p)
         {
             using (var repo = Repository().Value)
             {
@@ -79,11 +80,10 @@ namespace DeckedOut.Modules
                 deck.AddSlide(slideNumber);
             }
 
-            var serializer = new JavaScriptSerializer();
-            return serializer.Serialize(new { success = true });
+            return Response.AsJson(new { success = true });
         }
 
-        protected virtual string RemoveSlide(dynamic p)
+        protected virtual Response RemoveSlide(dynamic p)
         {
             using (var repo = Repository().Value)
             {
@@ -93,22 +93,21 @@ namespace DeckedOut.Modules
                 deck.RemoveSlide(slideNumber);
             }
 
-            var serializer = new JavaScriptSerializer();
-            return serializer.Serialize(new { success = true });
+            return Response.AsJson(new { success = true });
         }
 
-        protected virtual string SaveContent(dynamic p)
+        protected virtual Response SaveContent(dynamic p)
         {
             using (var repo = Repository().Value)
             {
                 var deck = GetDeck(repo, p.deckId);
                 var slide = GetDeckSlide(deck, p.slideNumber);
 
-                slide.Content = HttpUtility.HtmlDecode((string)p.content);
+                slide.Source = HttpUtility.HtmlDecode((string)p.content);
+                slide.Content = Markdown.Transform(slide.Source);
             }
 
-            var serializer = new JavaScriptSerializer();
-            return serializer.Serialize(new { success = true });
+            return Response.AsJson(new { success = true });
         }
 
         protected virtual Domain.Line MapToLine(string lineContent)
@@ -143,7 +142,7 @@ namespace DeckedOut.Modules
             {
                 DeckName = deck.Name,
                 SlideNumber = deck.NumberOf(slide),
-                Content = slide.Content,
+                Source = slide.Source,
                 DeckId = deck.Id
             };
         }
@@ -173,7 +172,7 @@ namespace DeckedOut.Modules
             return new ViewModels.Slide {
                 DeckName = deck.Name,
                 SlideNumber = deck.NumberOf(slide),
-                Content = new HtmlString(Markdown.Transform(slide.Content)),
+                Content = new HtmlString(slide.Content),
                 DeckId = deck.Id
             };
         }

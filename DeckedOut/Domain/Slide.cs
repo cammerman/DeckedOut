@@ -11,8 +11,10 @@ namespace DeckedOut.Domain
         public Slide()
         {
             Content = "";
+            Source = "";
         }
 
         public virtual string Content { get; set; }
+        public virtual string Source { get; set; }
     }
 }

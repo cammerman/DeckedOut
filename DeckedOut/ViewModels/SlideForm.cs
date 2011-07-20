@@ -11,7 +11,7 @@ namespace DeckedOut.ViewModels
         public virtual int SlideNumber { get; set; }
 
         public virtual string DeckName { get; set; }
-        public virtual string Content { get; set; }
+        public virtual string Source { get; set; }
 
         public virtual int? PreviousSlideNumber { get; set; }
         public virtual int? NextSlideNumber { get; set; }
