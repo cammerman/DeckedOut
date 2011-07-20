@@ -4,6 +4,27 @@
     color: #FFFFFF
 }
 
+.syntaxhighlighter
+{
+    font-size: .8em !important;
+}
+
+#slide a
+{
+    color: #5050FF;
+    text-decoration: none;
+}
+
+#slide a:visited
+{
+    color: #A050FF;
+}
+
+#slide a:hover
+{
+    text-decoration: underline;
+}
+
 #slide ul
 {
     padding-left: 2em;    
@@ -12,11 +33,6 @@
 #slide li
 {
     padding-left: 0.5em;
-}
-
-.syntaxhighlighter
-{
-    font-size: .8em !important;
 }
 
 #slide h1, #slide h2

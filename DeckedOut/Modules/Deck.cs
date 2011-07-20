@@ -13,11 +13,11 @@ namespace DeckedOut.Modules
 {
     public class Deck : JessModule
     {
-        protected virtual Func<Owned<IDeckRepository>>  Repository { get; private set; }
+        protected virtual Func<IDeckRepository> CreateRepository { get; private set; }
 
-        public Deck(Func<Owned<IDeckRepository>> repository)
+        public Deck(Func<IDeckRepository> createRepository)
         {
-            Repository = repository;
+            CreateRepository = createRepository;
 
             Get(
                 "/Deck",
@@ -32,16 +32,15 @@ namespace DeckedOut.Modules
 
         protected virtual DeckList GetListModel()
         {
-            using (var repo = Repository().Value)
-            {
-                return
-                    new DeckList {
-                        Decks =
-                            repo.GetAll()
-                                .Select(this.MapToModel)
-                                .ToList()
-                    };
-            }
+            var repo = CreateRepository();
+            
+            return
+                new DeckList {
+                    Decks =
+                        repo.GetAll()
+                            .Select(this.MapToModel)
+                            .ToList()
+                };
         }
 
         protected virtual ViewModels.Deck MapToModel(Domain.Deck domain)
@@ -53,25 +52,20 @@ namespace DeckedOut.Modules
 
         protected virtual Response CreateDeck(dynamic args)
         {
-            //var serializer = new JavaScriptSerializer();
-            
             try
             {
                 var newDeck = new Domain.Deck() { Name = args.name };
                 newDeck.Slides.Add(new Domain.Slide());
 
-                using (var repo = Repository().Value)
-                {
-                    repo.Add(newDeck);
-                }
+                var repo = CreateRepository();
+                repo.Add(newDeck);
+                repo.Commit();
 
                 return Response.AsJson(new { success = true, id = newDeck.Id });
-                //return serializer.Serialize(new { success = true, id = newDeck.Id });
             }
             catch (Exception ex)
             {
                 return Response.AsJson(new { success = false, message = ex.Message });
-                //return serializer.Serialize(new { success = false, message = ex.Message });
             }
         }
     }

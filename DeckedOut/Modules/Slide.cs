@@ -14,12 +14,12 @@ namespace DeckedOut.Modules
 {
     public class Slide : JessModule
     {
-        protected virtual Func<Owned<IDeckRepository>> Repository { get; private set; }
+        protected virtual Func<IDeckRepository> CreateRepository { get; private set; }
         protected virtual Markdown Markdown { get; private set; }
 
-        public Slide(Func<Owned<IDeckRepository>> repository, Markdown markdown)
+        public Slide(Func<IDeckRepository> createRepository, Markdown markdown)
         {
-            Repository = repository;
+            CreateRepository = createRepository;
             Markdown = markdown;
 
             Get(
@@ -67,45 +67,48 @@ namespace DeckedOut.Modules
 
         protected virtual Response AddSlide(dynamic p)
         {
-            using (var repo = Repository().Value)
-            {
-                Domain.Deck deck = GetDeck(repo, p.deckId);
-                var slideNumber = Convert.ToInt32((string)p.slideNumber);
+            var repo = CreateRepository();
+            
+            Domain.Deck deck = GetDeck(repo, p.deckId);
+            var slideNumber = Convert.ToInt32((string)p.slideNumber);
 
-                if (slideNumber < 0)
-                    slideNumber = 0;
-                else if (slideNumber > deck.Slides.Count + 1)
-                    slideNumber = deck.Slides.Count + 1;
+            if (slideNumber < 0)
+                slideNumber = 0;
+            else if (slideNumber > deck.Slides.Count + 1)
+                slideNumber = deck.Slides.Count + 1;
 
-                deck.AddSlide(slideNumber);
-            }
+            deck.AddSlide(slideNumber);
+
+            repo.Commit();
 
             return Response.AsJson(new { success = true });
         }
 
         protected virtual Response RemoveSlide(dynamic p)
         {
-            using (var repo = Repository().Value)
-            {
-                Domain.Deck deck = GetDeck(repo, p.deckId);
-                var slideNumber = Convert.ToInt32((string)p.slideNumber);
+            var repo = CreateRepository();
+            
+            Domain.Deck deck = GetDeck(repo, p.deckId);
+            var slideNumber = Convert.ToInt32((string)p.slideNumber);
 
-                deck.RemoveSlide(slideNumber);
-            }
+            deck.RemoveSlide(slideNumber);
+
+            repo.Commit();
 
             return Response.AsJson(new { success = true });
         }
 
         protected virtual Response SaveContent(dynamic p)
         {
-            using (var repo = Repository().Value)
-            {
-                var deck = GetDeck(repo, p.deckId);
-                var slide = GetDeckSlide(deck, p.slideNumber);
+            var repo = CreateRepository();
+            
+            var deck = GetDeck(repo, p.deckId);
+            var slide = GetDeckSlide(deck, p.slideNumber);
 
-                slide.Source = HttpUtility.HtmlDecode((string)p.content);
-                slide.Content = Markdown.Transform(slide.Source);
-            }
+            slide.Source = HttpUtility.HtmlDecode((string)p.content);
+            slide.Content = Markdown.Transform(slide.Source);
+
+            repo.Commit();
 
             return Response.AsJson(new { success = true });
         }
@@ -117,23 +120,22 @@ namespace DeckedOut.Modules
 
         protected virtual ViewModels.SlideForm MapToFormModel(int deckId, int slideNumber)
         {
-            using (var repo = Repository().Value)
+            var repo = CreateRepository();
+            
+            var deck = repo.Get(deckId);
+
+            var model = MapToFormModel(deck, deck.Slide(slideNumber));
+
+            if (slideNumber > 1)
+                model.PreviousSlideNumber = slideNumber - 1;
+
+            if (slideNumber < deck.Slides.Count)
             {
-                var deck = repo.Get(deckId);
-
-                var model = MapToFormModel(deck, deck.Slide(slideNumber));
-
-                if (slideNumber > 1)
-                    model.PreviousSlideNumber = slideNumber - 1;
-
-                if (slideNumber < deck.Slides.Count)
-                {
-                    model.NextSlideNumber = slideNumber + 1;
-                    model.LastSlideNumber = deck.Slides.Count;
-                }
+                model.NextSlideNumber = slideNumber + 1;
+                model.LastSlideNumber = deck.Slides.Count;
+            }
 
             return model;
-            }
         }
 
         protected virtual ViewModels.SlideForm MapToFormModel(Domain.Deck deck, Domain.Slide slide)
@@ -149,22 +151,21 @@ namespace DeckedOut.Modules
 
         protected virtual ViewModels.Slide MapToModel(int deckId, int slideNumber)
         {
-            using (var repo = Repository().Value)
+            var repo = CreateRepository();
+            
+            var deck = repo.Get(deckId);
+
+            var model = MapToModel(deck, deck.Slide(slideNumber));
+
+            if (slideNumber > 1)
+                model.PreviousSlideNumber = slideNumber - 1;
+
+            if (slideNumber < deck.Slides.Count)
             {
-                var deck = repo.Get(deckId);
-
-                var model = MapToModel(deck, deck.Slide(slideNumber));
-
-                if (slideNumber > 1)
-                    model.PreviousSlideNumber = slideNumber - 1;
-
-                if (slideNumber < deck.Slides.Count)
-                {
-                    model.NextSlideNumber = slideNumber + 1;
-                }
-
-                return model;
+                model.NextSlideNumber = slideNumber + 1;
             }
+
+            return model;
         }
 
         protected virtual ViewModels.Slide MapToModel(Domain.Deck deck, Domain.Slide slide)

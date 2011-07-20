@@ -78,12 +78,12 @@ namespace DeckedOut.Persistence
                 Db.Decks.Remove(deck);
         }
 
-        protected virtual void Rollback()
+        public virtual void Rollback()
         {
             _db = null;
         }
 
-        protected virtual void Commit()
+        public virtual void Commit()
         {
             if (_db != null)
             {
@@ -94,28 +94,6 @@ namespace DeckedOut.Persistence
                     serializer.Serialize(fs, _db);
                 }
             }
-        }
-
-        public virtual void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                // Clean up managed resources
-                Commit();
-            }   
-
-            // Clean up unmanaged resources
-        }
-
-        ~DeckRepository()
-        {
-            Dispose(false);
         }
     }
 }
