@@ -8,7 +8,11 @@
     </head>
     <body>
         <div id="content">
+            <div><a href="/">Home</a></div>
             <textarea Id="SlideContent" cols="80" rows="30" wrap="soft" name="SlideText">@Model.Content</textarea>
+            <ul>
+                <li><a href="/Deck/@Model.DeckId/Slide/@Model.SlideNumber">View Slide</a></li>
+            </ul>
             <ul>
                 @if (Model.PreviousSlideNumber != null || Model.NextSlideNumber != null)
                 {
@@ -48,9 +52,6 @@
             
                 $.ajax({
                     url: "/Deck/@Model.DeckId/Slide/@Model.SlideNumber/Remove/",
-                    data: {
-                        content: $("#SlideContent").val()
-                    },
                     dataType: "json",
                     context: document.body,
                     type: "POST",
@@ -71,11 +72,13 @@
 
             $("#SaveChanges").click(function (e) {
                 e.preventDefault();
+                
+                var contentDiv = $("<div></div>").text($("#SlideContent").val());
 
                 $.ajax({
                     url: "/Deck/@Model.DeckId/Slide/@Model.SlideNumber/Edit/",
                     data: {
-                        content: $("#SlideContent").val()
+                        content: contentDiv.html()
                     },
                     dataType: "json",
                     context: document.body,
@@ -94,9 +97,6 @@
 
                 $.ajax({
                     url: "/Deck/@Model.DeckId/Slide/@Model.SlideNumber/Add/",
-                    data: {
-                        content: $("#SlideContent").val()
-                    },
                     dataType: "json",
                     context: document.body,
                     type: "POST",
@@ -116,9 +116,6 @@
 
                 $.ajax({
                     url: "/Deck/@Model.DeckId/Slide/@(Model.SlideNumber + 1)/Add/",
-                    data: {
-                        content: $("#SlideContent").val()
-                    },
                     dataType: "json",
                     context: document.body,
                     type: "POST",
@@ -138,10 +135,12 @@
 
                 var stop = false;
 
+                var contentDiv = $("<div></div>").text($("#SlideContent").val());
+
                 $.ajax({
                     url: "/Deck/@Model.DeckId/Slide/@Model.SlideNumber/Edit/",
                     data: {
-                        content: $("#SlideContent").val()
+                        content: contentDiv.html()
                     },
                     dataType: "json",
                     context: document.body,
@@ -158,9 +157,6 @@
                 if (!stop) {
                     $.ajax({
                         url: "/Deck/@Model.DeckId/Slide/@(Model.SlideNumber + 1)/Add/",
-                        data: {
-                            content: $("#SlideContent").val()
-                        },
                         dataType: "json",
                         context: document.body,
                         type: "POST",

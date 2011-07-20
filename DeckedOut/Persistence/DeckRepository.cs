@@ -34,7 +34,7 @@ namespace DeckedOut.Persistence
 
             try
             {
-                using (var fs = new FileStream("db.xml", FileMode.Open, FileAccess.Read, FileShare.Read))
+                using (var fs = new FileStream(@"C:\DeckedOut\db.xml", FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     return deserializer.Deserialize(fs) as DeckDatabase;
                 }
@@ -89,7 +89,7 @@ namespace DeckedOut.Persistence
             {
                 var serializer = new XmlSerializer(typeof(DeckDatabase));
 
-                using (var fs = new FileStream("db.xml", FileMode.Create, FileAccess.Write, FileShare.Read))
+                using (var fs = new FileStream(@"C:\DeckedOut\db.xml", FileMode.Create, FileAccess.Write, FileShare.Read))
                 {
                     serializer.Serialize(fs, _db);
                 }

@@ -23,11 +23,13 @@ namespace DeckedOut.Infrastructure
 
             builder.RegisterAssemblyTypes(assembly)
                 .Where(t => t.BaseType == typeof(JessModule))
-                .AsSelf();
+                .AsSelf()
+                .InstancePerLifetimeScope();
 
             builder.RegisterAssemblyTypes(assembly)
                 .Where(t => t.GetInterfaces().Any())
-                .AsImplementedInterfaces();
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<DeckRepository>()
                 .As<IDeckRepository>()

@@ -6,14 +6,15 @@ using Jessica;
 using DeckedOut.ViewModels;
 using DeckedOut.Domain;
 using System.Web.Script.Serialization;
+using Autofac.Features.OwnedInstances;
 
 namespace DeckedOut.Modules
 {
     public class Deck : JessModule
     {
-        protected virtual IDeckRepository Repository { get; private set; }
+        protected virtual Func<Owned<IDeckRepository>>  Repository { get; private set; }
 
-        public Deck(IDeckRepository repository)
+        public Deck(Func<Owned<IDeckRepository>> repository)
         {
             Repository = repository;
 
@@ -30,12 +31,16 @@ namespace DeckedOut.Modules
 
         protected virtual DeckList GetListModel()
         {
-            return 
-                new DeckList {
-                    Decks =
-                        Repository.GetAll()
-                        .Select(this.MapToModel)
-                        .ToList() };
+            using (var repo = Repository().Value)
+            {
+                return
+                    new DeckList {
+                        Decks =
+                            repo.GetAll()
+                                .Select(this.MapToModel)
+                                .ToList()
+                    };
+            }
         }
 
         protected virtual ViewModels.Deck MapToModel(Domain.Deck domain)
@@ -53,8 +58,12 @@ namespace DeckedOut.Modules
             {
                 var newDeck = new Domain.Deck() { Name = args.name };
                 newDeck.Slides.Add(new Domain.Slide());
-                Repository.Add(newDeck);
-                
+
+                using (var repo = Repository().Value)
+                {
+                    repo.Add(newDeck);
+                }
+   
                 return serializer.Serialize(new { success = true, id = newDeck.Id });
             }
             catch (Exception ex)

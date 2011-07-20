@@ -18,10 +18,10 @@ body {
 #content {
 	margin: auto;
 	overflow: visible;
-	min-width: 30.0em; 
-	max-width: 30.0em; 
+	min-width: 33.0em; 
+	max-width: 33.0em; 
 	padding: 0em 2em;
-	line-height: 2.5ex;
+	line-height: 2.em;
 }
 
 #main-wrapper {
